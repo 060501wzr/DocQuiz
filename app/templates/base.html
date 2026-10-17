@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}DocQuiz{% endblock %}</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 16px; }
+    h1 { color: #333; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .card h3 { margin: 0 0 8px; }
+    .meta { color: #666; font-size: 14px; }
+    a { color: #2a7ae2; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1><a href="/">DocQuiz</a></h1>
+  <hr>
+  {% block content %}{% endblock %}
+</body>
+</html>

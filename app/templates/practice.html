@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}做题 - {{ bank.name }}{% endblock %}
+
+{% block content %}
+  <p><a href="/bank/{{ bank.id }}">← 返回题库详情</a></p>
+
+  <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <h2 style="margin: 0;">{{ bank.name }}</h2>
+
+    <form method="post" action="/bank/{{ bank.id }}/reset"
+          onsubmit="return confirm('确定要重新开始本题库的作答吗？错题本和练习记录会保留。');">
+      <button type="submit" style="padding: 4px 12px;">重新开始本题库</button>
+    </form>
+  </div>
+
+  <p class="meta">进度：{{ index + 1 }} / {{ total }}</p>
+  <p class="meta">题型：{{ question.type }}</p>
+
+  <hr>
+
+  <form method="post">
+    <h3>{{ question.stem }}</h3>
+
+    {% set user_ans = current.user_answer if current else None %}
+    {% set submitted = current is not none %}
+    {% set disabled = "disabled" if submitted else "" %}
+
+    {% if question.type == "single" %}
+      {% for opt in question.options %}
+        <div style="margin: 6px 0;">
+          <label>
+            <input type="radio" name="answer" value="{{ opt.label }}"
+              {% if user_ans == opt.label %}checked{% endif %}
+              {{ disabled }}>
+            {{ opt.label }}. {{ opt.text }}
+          </label>
+        </div>
+      {% endfor %}
+
+    {% elif question.type == "multiple" %}
+      {% for opt in question.options %}
+        <div style="margin: 6px 0;">
+          <label>
+            <input type="checkbox" name="answer" value="{{ opt.label }}"
+              {% if user_ans and opt.label in user_ans %}checked{% endif %}
+              {{ disabled }}>
+            {{ opt.label }}. {{ opt.text }}
+          </label>
+        </div>
+      {% endfor %}
+
+    {% elif question.type == "true_false" %}
+      <div style="margin: 6px 0;">
+        <label>
+          <input type="radio" name="answer" value="true"
+            {% if user_ans == "true" %}checked{% endif %} {{ disabled }}> 对
+        </label>
+      </div>
+      <div style="margin: 6px 0;">
+        <label>
+          <input type="radio" name="answer" value="false"
+            {% if user_ans == "false" %}checked{% endif %} {{ disabled }}> 错
+        </label>
+      </div>
+
+    {% elif question.type == "fill_blank" %}
+      <p>
+        <input type="text" name="answer" style="width: 60%; padding: 6px;"
+          value="{{ user_ans or '' }}" placeholder="请输入答案" {{ disabled }}>
+      </p>
+
+    {% elif question.type == "short_answer" %}
+      <p>
+        <textarea name="answer" rows="5" style="width: 100%; padding: 6px;"
+          placeholder="请输入答案" {{ disabled }}>{{ user_ans or '' }}</textarea>
+      </p>
+    {% endif %}
+
+    {% if not submitted %}
+      <p><button type="submit" style="padding: 8px 20px;">提交答案</button></p>
+    {% endif %}
+  </form>
+
+  {% if current %}
+    <hr>
+    <h3>判分结果</h3>
+
+    {% if question.type in ["fill_blank", "short_answer"] %}
+      <p style="color: #b58900;">主观题：请对照参考答案自行判断。</p>
+    {% elif current.is_correct %}
+      <p style="color: green;">✅ 回答正确</p>
+    {% else %}
+      <p style="color: red;">❌ 回答错误</p>
+    {% endif %}
+
+    <p><strong>标准答案：</strong>{{ question.answer }}</p>
+
+    {% if question.analysis %}
+      <p><strong>解析：</strong>{{ question.analysis }}</p>
+    {% endif %}
+  {% endif %}
+
+  <hr>
+
+  <div>
+    {% if index > 0 %}
+      <a href="/bank/{{ bank.id }}/practice/{{ index - 1 }}">← 上一题</a>
+    {% else %}
+      <span style="color: #aaa;">← 上一题</span>
+    {% endif %}
+
+    <span style="margin: 0 16px;">|</span>
+
+    {% if index < total - 1 %}
+      <a href="/bank/{{ bank.id }}/practice/{{ index + 1 }}">下一题 →</a>
+    {% else %}
+      <span style="color: #aaa;">下一题 →</span>
+    {% endif %}
+  </div>
+{% endblock %}

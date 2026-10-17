@@ -1,0 +1,49 @@
+[
+  {
+    "type": "single",
+    "stem": "Python 中用于定义函数的关键字是？",
+    "options": [
+      {"label": "A", "text": "def"},
+      {"label": "B", "text": "function"},
+      {"label": "C", "text": "func"},
+      {"label": "D", "text": "lambda"}
+    ],
+    "answer": "A",
+    "analysis": "def 是 Python 定义函数的关键字。",
+    "subject": "Python"
+  },
+  {
+    "type": "multiple",
+    "stem": "以下哪些是 Python 的内置数据类型？",
+    "options": [
+      {"label": "A", "text": "list"},
+      {"label": "B", "text": "dict"},
+      {"label": "C", "text": "int"},
+      {"label": "D", "text": "char"}
+    ],
+    "answer": ["A", "B", "C"],
+    "analysis": "Python 没有 char 类型。",
+    "subject": "Python"
+  },
+  {
+    "type": "true_false",
+    "stem": "Python 是解释型语言。",
+    "answer": true,
+    "analysis": "Python 代码由解释器逐行执行。",
+    "subject": "Python"
+  },
+  {
+    "type": "fill_blank",
+    "stem": "Python 中打印输出的函数是 ____。",
+    "answer": "print",
+    "analysis": "print 是内置输出函数。",
+    "subject": "Python"
+  },
+  {
+    "type": "short_answer",
+    "stem": "简述列表（list）和元组（tuple）的区别。",
+    "answer": "列表可变，元组不可变。列表用 []，元组用 ()。",
+    "analysis": "重点在可变性。",
+    "subject": "Python"
+  }
+]

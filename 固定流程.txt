@@ -1,0 +1,11 @@
+以后每次固定的开发流程:
+打开cmd
+
+cd /d E:\AAA-DocQuiz
+venv\Scripts\activate
+
+看到 (venv) 后，再运行项目、装库、跑测试。
+
+退出虚拟环境
+
+deactivate

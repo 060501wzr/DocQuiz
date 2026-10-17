@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}我的题库 - DocQuiz{% endblock %}
+
+{% block content %}
+  <h2>我的题库</h2>
+
+  {% if banks %}
+    {% for bank in banks %}
+      <div class="card">
+        <h3><a href="/bank/{{ bank.id }}">{{ bank.name }}</a></h3>
+        <p class="meta">
+          来源：{{ bank.source_type }} / {{ bank.source_file }}　
+          题目数：{{ bank.questions | length }}　
+          导入时间：{{ bank.imported_at }}
+        </p>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>还没有题库，请先导入 JSON 文件。</p>
+  {% endif %}
+{% endblock %}

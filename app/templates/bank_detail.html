@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ bank.name }} - DocQuiz{% endblock %}
+
+{% block content %}
+  <p><a href="/">← 返回题库列表</a></p>
+
+  <h2>{{ bank.name }}</h2>
+  <p class="meta">
+    来源：{{ bank.source_type }} / {{ bank.source_file }}　
+    题目数：{{ questions | length }}　
+    导入时间：{{ bank.imported_at }}
+  </p>
+
+  <p>
+    <a href="/bank/{{ bank.id }}/practice" style="
+      display: inline-block; padding: 8px 16px;
+      background: #2a7ae2; color: white; border-radius: 6px;
+      text-decoration: none;">开始刷题</a>
+  </p>
+
+  <hr>
+
+  <h3>题目列表</h3>
+
+  {% if questions %}
+    <ol>
+      {% for q in questions %}
+        <li>
+          <strong>[{{ q.type }}]</strong>
+          {{ q.stem }}
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p>这个题库里还没有题目。</p>
+  {% endif %}
+{% endblock %}
