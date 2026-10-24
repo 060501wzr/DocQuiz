@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}错题本 - DocQuiz{% endblock %}
+{% block content %}
+  <h2>错题本</h2>
+  <p class="meta">共 {{ wrongs|length }} 道错题。</p>
+  <hr>
+  {% if wrongs %}
+    {% for w in wrongs %}
+      <div class="card">
+        <h3>[{{ w.wrong_count }}次错误] {{ w.question.stem }}</h3>
+        <p><strong>题型：</strong>{{ w.question.type }}</p>
+        <p><strong>标准答案：</strong>{{ w.question.answer }}</p>
+        {% if w.question.analysis %}<p><strong>解析：</strong>{{ w.question.analysis }}</p>{% endif %}
+        <p class="meta">最近做错时间：{{ w.last_wrong_at }}</p>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>太棒了，目前没有错题！</p>
+  {% endif %}
+{% endblock %}

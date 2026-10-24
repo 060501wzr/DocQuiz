@@ -1,38 +1,45 @@
 {% extends "base.html" %}
-
 {% block title %}{{ bank.name }} - DocQuiz{% endblock %}
-
 {% block content %}
   <p><a href="/">← 返回题库列表</a></p>
 
-  <h2>{{ bank.name }}</h2>
-  <p class="meta">
-    来源：{{ bank.source_type }} / {{ bank.source_file }}　
-    题目数：{{ questions | length }}　
-    导入时间：{{ bank.imported_at }}
-  </p>
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
+    <div>
+      <h2 style="margin: 0 0 10px 0;">{{ bank.name }}</h2>
+      <p class="meta">题目数：{{ questions | length }}</p>
+    </div>
+    <div>
+      <!-- 找到这段代码并替换 -->
+      <a href="/bank/{{ bank.id }}/practice" class="btn btn-outline" style="border-color: #52c41a; color: #52c41a; font-size: 16px; padding: 8px 20px; font-weight: bold;">开始刷题</a>
+    </div>
+  </div>
 
-  <p>
-    <a href="/bank/{{ bank.id }}/practice" style="
-      display: inline-block; padding: 8px 16px;
-      background: #2a7ae2; color: white; border-radius: 6px;
-      text-decoration: none;">开始刷题</a>
-  </p>
+  <!-- 追加题目上传区 -->
+  <div class="card" style="background-color: #fafafa; padding: 15px; margin-bottom: 20px;">
+    <form method="post" action="/bank/{{ bank.id }}/append" enctype="multipart/form-data" style="display: flex; align-items: center; gap: 15px;">
+      <strong style="font-size: 14px;">给本题库追加题目：</strong>
+      <input type="file" name="file" accept=".json" required style="font-size: 14px;">
+      <button type="submit" class="btn btn-outline">上传追加</button>
+    </form>
+  </div>
 
-  <hr>
+  <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 20px 0;">
 
   <h3>题目列表</h3>
-
   {% if questions %}
-    <ol>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
       {% for q in questions %}
-        <li>
-          <strong>[{{ q.type }}]</strong>
-          {{ q.stem }}
-        </li>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid #e8e8e8; border-radius: 6px;">
+          <div>
+            <strong>[{{ q.type }}]</strong> {{ q.stem }}
+          </div>
+          <form method="post" action="/question/{{ q.id }}/delete" onsubmit="return confirm('确定要删除这道题吗？相关的错题和收藏也会被清除。');">
+            <button type="submit" class="btn btn-outline" style="color: #ff4d4f; border-color: #ff4d4f; padding: 4px 12px; font-size: 13px;">删除</button>
+          </form>
+        </div>
       {% endfor %}
-    </ol>
+    </div>
   {% else %}
-    <p>这个题库里还没有题目。</p>
+    <p class="meta">这个题库里还没有题目，请在上方追加。</p>
   {% endif %}
 {% endblock %}

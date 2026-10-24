@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}导入题库 - DocQuiz{% endblock %}
+{% block content %}
+  <div class="card" style="max-width: 600px; margin: 40px auto; border-top: 4px solid #1890ff; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+    <h2 style="color: #1890ff; margin-top: 0;">导入新题库</h2>
+    <p class="meta">请上传符合 DocQuiz 格式要求的 JSON 文件。</p>
+    <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 20px 0;">
+    
+    <form method="post" enctype="multipart/form-data">
+      <p>
+        <label style="font-weight: bold; color: #333;">题库名称：</label><br>
+        <input type="text" name="bank_name" class="text-input" style="margin-top: 8px; border-color: #91d5ff;" required placeholder="例如：Python 基础">
+      </p>
+      <p style="margin-top: 20px;">
+        <label style="font-weight: bold; color: #333;">选择文件：</label><br>
+        <input type="file" name="file" accept=".json" required style="margin-top: 8px; padding: 8px; border: 1px dashed #1890ff; border-radius: 6px; width: 100%; background: #e6f7ff;">
+      </p>
+      <button type="submit" class="btn" style="margin-top: 24px; width: 100%; background-color: #1890ff; color: white; font-size: 16px; padding: 12px; box-shadow: 0 2px 6px rgba(24,144,255,0.4);">开始导入</button>
+    </form>
+  </div>
+{% endblock %}

@@ -3,6 +3,13 @@ from datetime import datetime
 from .extensions import db
 
 
+class Favorite(db.Model):
+    __tablename__ = "favorite"
+
+    id = db.Column(db.Integer, primary_key=True)
+    question_id = db.Column(db.Integer, db.ForeignKey("question.id"), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 class QuestionBank(db.Model):
     __tablename__ = "question_bank"
 
@@ -30,6 +37,9 @@ class Question(db.Model):
     subject = db.Column(db.String(50))
     order_no = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    wrong_book = db.relationship('WrongBook', backref='question', uselist=False)
+    favorite = db.relationship('Favorite', backref='question', uselist=False)
 
 class PracticeRecord(db.Model):
     __tablename__ = "practice_record"

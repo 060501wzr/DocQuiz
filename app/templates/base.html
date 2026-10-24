@@ -2,20 +2,28 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}DocQuiz{% endblock %}</title>
+  <!-- 引入全局基础样式 -->
   <style>
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 16px; }
-    h1 { color: #333; }
-    .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-    .card h3 { margin: 0 0 8px; }
-    .meta { color: #666; font-size: 14px; }
-    a { color: #2a7ae2; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f0f2f5; margin: 0; color: #333; line-height: 1.6; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px 40px; }
+    h1, h2, h3 { color: #1a1a1a; }
+    a { color: #1890ff; text-decoration: none; transition: color 0.3s; }
+    a:hover { color: #40a9ff; text-decoration: underline; }
+    .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 24px; margin-bottom: 24px; }
+    .meta { color: #8c8c8c; font-size: 14px; }
   </style>
+  <!-- 留给子页面插入各自的 CSS -->
+  {% block head %}{% endblock %}
 </head>
 <body>
-  <h1><a href="/">DocQuiz</a></h1>
-  <hr>
-  {% block content %}{% endblock %}
+  <div class="container">
+    <h1><a href="/" style="color: inherit; text-decoration: none;">DocQuiz</a></h1>
+    {% block content %}{% endblock %}
+  </div>
+  <!-- 留给子页面插入各自的 JS -->
+  {% block scripts %}{% endblock %}
 </body>
 </html>

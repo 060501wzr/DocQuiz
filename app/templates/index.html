@@ -1,22 +1,33 @@
 {% extends "base.html" %}
-
 {% block title %}我的题库 - DocQuiz{% endblock %}
-
 {% block content %}
-  <h2>我的题库</h2>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="margin: 0;">我的题库</h2>
+    <a href="/bank/import" class="btn btn-primary">+ 导入新题库</a>
+  </div>
 
   {% if banks %}
     {% for bank in banks %}
-      <div class="card">
-        <h3><a href="/bank/{{ bank.id }}">{{ bank.name }}</a></h3>
-        <p class="meta">
-          来源：{{ bank.source_type }} / {{ bank.source_file }}　
-          题目数：{{ bank.questions | length }}　
-          导入时间：{{ bank.imported_at }}
-        </p>
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h3 style="margin: 0 0 8px 0;"><a href="/bank/{{ bank.id }}">{{ bank.name }}</a></h3>
+          <p class="meta" style="margin: 0;">
+            来源：{{ bank.source_type }}　题目数：{{ bank.questions | length }}　导入时间：{{ bank.imported_at.strftime('%Y-%m-%d %H:%M') }}
+          </p>
+        </div>
+        <div>
+          <a href="/bank/{{ bank.id }}" class="btn btn-outline" style="margin-right: 15px; color: #1890ff; border-color: #1890ff;">进入题库</a>
+          <form method="post" action="/bank/{{ bank.id }}/delete" style="display: inline;" onsubmit="return confirm('⚠️ 警告：确定要删除整个题库吗？包含里面的所有题目、错题记录和收藏都将被永久删除，不可恢复！');">
+            <!-- 改成纯文本样式，无边框无背景 -->
+            <button type="submit" style="background: none; border: none; color: #ff4d4f; cursor: pointer; padding: 0; font-size: 14px; text-decoration: underline;">删除题库</button>
+          </form>
+        </div>
       </div>
     {% endfor %}
   {% else %}
-    <p>还没有题库，请先导入 JSON 文件。</p>
+    <div class="card" style="text-align: center; padding: 40px;">
+      <p class="meta">还没有题库，请先导入 JSON 文件。</p>
+      <a href="/bank/import" class="btn btn-primary" style="margin-top: 10px;">去导入</a>
+    </div>
   {% endif %}
 {% endblock %}
