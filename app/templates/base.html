@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}DocQuiz{% endblock %}</title>
-  <!-- 引入全局基础样式 -->
   <style>
     * { box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f0f2f5; margin: 0; color: #333; line-height: 1.6; }
@@ -14,16 +13,43 @@
     a:hover { color: #40a9ff; text-decoration: underline; }
     .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 24px; margin-bottom: 24px; }
     .meta { color: #8c8c8c; font-size: 14px; }
+    
+    /* 顶部导航栏样式 */
+    .top-navbar { background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.08); padding: 10px 40px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    
+    /* 调整 Logo 图片的尺寸 */
+    .logo-img { height: 65px; object-fit: contain; display: block; transition: transform 0.2s; }
+    .logo-img:hover { transform: scale(1.02); }
+    
+    .user-info { display: flex; align-items: center; gap: 15px; font-size: 15px; }
   </style>
-  <!-- 留给子页面插入各自的 CSS -->
   {% block head %}{% endblock %}
 </head>
 <body>
+  
+  <!-- 全局顶部导航栏 -->
+  <div class="top-navbar">
+    <!-- 替换点：使用 url_for 引用静态图片 -->
+    <a href="/">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo-img" alt="DocQuiz Logo">
+    </a>
+    
+    <div class="user-info">
+      {% if current_user.is_authenticated %}
+        <span style="color: #595959;">欢迎，<strong style="color: #1890ff;">{{ current_user.username }}</strong></span>
+        <span style="color: #d9d9d9;">|</span>
+        <a href="{{ url_for('auth.logout') }}" style="color: #ff4d4f;">退出登录</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}">登录</a>
+        <span style="color: #d9d9d9;">|</span>
+        <a href="{{ url_for('auth.register') }}">注册</a>
+      {% endif %}
+    </div>
+  </div>
+
   <div class="container">
-    <h1><a href="/" style="color: inherit; text-decoration: none;">DocQuiz</a></h1>
     {% block content %}{% endblock %}
   </div>
-  <!-- 留给子页面插入各自的 JS -->
   {% block scripts %}{% endblock %}
 </body>
 </html>

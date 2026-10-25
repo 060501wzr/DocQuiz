@@ -171,6 +171,21 @@
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
   margin-bottom: 24px;
+  max-height: 400px; /* 限制最大高度，超过就会出滚动条 */
+  overflow-y: auto;  /* 垂直方向允许滚动 */
+  padding-right: 5px; /* 给滚动条留点空间，防止挡住题号 */
+}
+
+/* 顺便美化一下滚动条，让它看起来不突兀 (适配 Webkit 内核浏览器如 Chrome/Edge) */
+.answer-card-grid::-webkit-scrollbar {
+  width: 6px;
+}
+.answer-card-grid::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+.answer-card-grid::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
 .answer-card-item {

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}注册 - DocQuiz{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 200px);">
+    <div style="background: white; padding: 50px 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 480px; border-top: 6px solid #52c41a;">
+        
+        <h2 style="text-align: center; color: #333; margin-top: 0; margin-bottom: 10px; font-size: 28px; font-weight: bold;">创建新账号</h2>
+        <img src="{{ url_for('static', filename='images/logo.png') }}" style="height: 60px; display: block; margin: 0 auto 20px auto;" alt="Logo">
+        <p style="text-align: center; color: #8c8c8c; margin-bottom: 30px; font-size: 15px;">开始您的 DocQuiz 刷题之旅</p>
+
+        <!-- 消息提示 -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div style="background-color: #fff2f0; color: #ff4d4f; padding: 10px; border-radius: 6px; margin-bottom: 20px; text-align: center; font-size: 14px; border: 1px solid #ffccc7;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="post">
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #595959;">用户名</label>
+                <input type="text" name="username" required placeholder="设置您的用户名" 
+                       style="width: 100%; padding: 14px 16px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; outline: none; transition: all 0.3s; box-sizing: border-box;"
+                       onfocus="this.style.borderColor='#52c41a'; this.style.boxShadow='0 0 0 3px rgba(82,196,26,0.2)';"
+                       onblur="this.style.borderColor='#d9d9d9'; this.style.boxShadow='none';">
+            </div>
+
+            <div style="margin-bottom: 32px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #595959;">密码</label>
+                <input type="password" name="password" required placeholder="设置您的密码" 
+                       style="width: 100%; padding: 14px 16px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; outline: none; transition: all 0.3s; box-sizing: border-box;"
+                       onfocus="this.style.borderColor='#52c41a'; this.style.boxShadow='0 0 0 3px rgba(82,196,26,0.2)';"
+                       onblur="this.style.borderColor='#d9d9d9'; this.style.boxShadow='none';">
+            </div>
+
+            <button type="submit" 
+                    style="width: 100%; padding: 14px; background-color: #52c41a; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(82,196,26,0.3);"
+                    onmouseover="this.style.backgroundColor='#73d13d'; this.style.transform='translateY(-2px)'"
+                    onmouseout="this.style.backgroundColor='#52c41a'; this.style.transform='translateY(0)'">
+                注 册
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 24px; font-size: 15px; color: #8c8c8c;">
+            已有账号？ <a href="{{ url_for('auth.login') }}" style="color: #52c41a; font-weight: bold; text-decoration: none;">直接登录</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

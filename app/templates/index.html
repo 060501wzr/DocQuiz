@@ -5,6 +5,18 @@
     <h2 style="margin: 0;">我的题库</h2>
     <a href="/bank/import" class="btn btn-primary">+ 导入新题库</a>
   </div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div style="background-color: #fff2f0; color: #ff4d4f; padding: 10px; border-radius: 6px; margin-bottom: 20px; text-align: center; font-size: 14px; border: 1px solid #ffccc7;">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% if banks %}
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+  {% endif %}
 
   {% if banks %}
     {% for bank in banks %}

@@ -1,20 +1,59 @@
 {% extends "base.html" %}
+
 {% block title %}错题本 - DocQuiz{% endblock %}
+
 {% block content %}
-  <h2>错题本</h2>
-  <p class="meta">共 {{ wrongs|length }} 道错题。</p>
-  <hr>
+
+<!-- 返回按钮 -->
+ <p style="margin-bottom: 15px;"><a href="/" style="font-size: 15px;">← 返回我的题库</a></p>
+ 
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div>
+      <h2 style="margin: 0 0 8px 0;">错题本</h2>
+      <p class="meta" style="margin: 0;">共 {{ wrongs|length }} 道错题。</p>
+    </div>
+    {% if wrongs %}
+      <a href="/practice/wrong" class="btn" style="background-color: #ff4d4f; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(255,77,79,0.3);">
+        ⚡ 一键重刷所有错题
+      </a>
+    {% endif %}
+  </div>
+
+  <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 20px 0;">
+
   {% if wrongs %}
-    {% for w in wrongs %}
-      <div class="card">
-        <h3>[{{ w.wrong_count }}次错误] {{ w.question.stem }}</h3>
-        <p><strong>题型：</strong>{{ w.question.type }}</p>
-        <p><strong>标准答案：</strong>{{ w.question.answer }}</p>
-        {% if w.question.analysis %}<p><strong>解析：</strong>{{ w.question.analysis }}</p>{% endif %}
-        <p class="meta">最近做错时间：{{ w.last_wrong_at }}</p>
+    <!-- 滚动容器：限制最大高度，超出出现滚动条 -->
+    <div style="max-height: 65vh; overflow-y: auto; padding-right: 10px;">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        {% for w in wrongs %}
+          <div class="card" style="margin-bottom: 0; border-left: 4px solid #ff4d4f; padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 18px; color: #333;">{{ w.question.stem }}</h3>
+              <span style="background: #fff1f0; color: #ff4d4f; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; white-space: nowrap;">
+                错 {{ w.wrong_count }} 次
+              </span>
+            </div>
+            
+            <p style="margin: 6px 0; font-size: 14px;"><strong style="color: #595959;">题型：</strong>{{ w.question.type }}</p>
+            <p style="margin: 6px 0; font-size: 14px;"><strong style="color: #595959;">标准答案：</strong><span style="color: #52c41a; font-weight: bold;">{{ w.question.answer }}</span></p>
+            
+            {% if w.question.analysis %}
+              <p style="margin: 6px 0; font-size: 14px; color: #8c8c8c; background: #fafafa; padding: 10px; border-radius: 4px;">
+                <strong>解析：</strong>{{ w.question.analysis }}
+              </p>
+            {% endif %}
+            
+            <p class="meta" style="margin-top: 12px; margin-bottom: 0; font-size: 12px; text-align: right;">
+              最近做错时间：{{ w.last_wrong_at.strftime('%Y-%m-%d %H:%M') }}
+            </p>
+          </div>
+        {% endfor %}
       </div>
-    {% endfor %}
+    </div>
   {% else %}
-    <p>太棒了，目前没有错题！</p>
+    <div class="card" style="text-align: center; padding: 40px;">
+      <p class="meta">太棒了，目前没有错题！</p>
+      <a href="/" class="btn btn-primary" style="margin-top: 10px;">去刷题</a>
+    </div>
   {% endif %}
 {% endblock %}

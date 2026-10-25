@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}做题 - {{ bank.name }}{% endblock %}
+{% block title %}做题 - {{ title }}{% endblock %}
 
 {% block head %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/practice.css') }}">
@@ -8,7 +8,13 @@
 
 {% block content %}
   <div class="top-nav">
-    <a href="/bank/{{ bank.id }}">← 返回题库详情</a>
+    {% if mode.startswith('bank_') %}
+      <a href="/bank/{{ mode.split('_')[1] }}">← 返回题库详情</a>
+    {% elif mode == 'wrong' %}
+      <a href="/wrong">← 返回错题本</a>
+    {% elif mode == 'favorite' %}
+      <a href="/favorites">← 返回收藏夹</a>
+    {% endif %}
     <a href="/wrong" style="color: #ff4d4f;">错题本</a>
     <a href="/favorites" style="color: #faad14;">我的收藏</a>
   </div>
@@ -18,9 +24,9 @@
     <!-- ================= 左侧：答题区域 ================= -->
     <div class="card question-area">
       <div class="header-info">
-        <h2 style="margin: 0;">{{ bank.name }}</h2>
-        <form method="post" action="/bank/{{ bank.id }}/reset" onsubmit="return confirm('确定要重新开始吗？当前记录将清空。');">
-          <button type="submit" class="btn btn-outline" style="border-color: #faad14; color: #faad14;">重新开始本题库</button>
+        <h2 style="margin: 0;">{{ title }}</h2>
+        <form method="post" action="/practice/{{ mode }}/reset" onsubmit="return confirm('确定要重新开始吗？当前记录将清空。');">
+          <button type="submit" class="btn btn-outline" style="border-color: #faad14; color: #faad14;">重新开始</button>
         </form>
       </div>
 
@@ -38,7 +44,7 @@
       </div>
 
       <!-- 选项与作答 -->
-      <form method="post">
+      <form method="post" action="/practice/{{ mode }}/{{ index }}">
         {% set user_ans = current.user_answer if current else None %}
 
         {% if question.type == "single" or question.type == "multiple" %}
@@ -92,9 +98,9 @@
             <p style="margin: 8px 0; color: #595959;"><strong>解析：</strong>{{ question.analysis }}</p>
           {% endif %}
 
-          {% if question.type in ["fill_blank", "short_answer"] %}
+          {% if question.type in ["fill_blank", "short_answer"] and mode.startswith('bank_') %}
           <div class="self-grade-area">
-              <form method="post" action="/api/self_grade/{{ bank.id }}/{{ index }}" style="display: flex; align-items: center; gap: 12px; width: 100%;">
+              <form method="post" action="/api/self_grade/{{ mode.split('_')[1] }}/{{ index }}" style="display: flex; align-items: center; gap: 12px; width: 100%;">
                 <span style="font-weight: bold;">自评打分 (0-10分)：</span>
                 <input type="range" name="score" min="0" max="10" value="{{ current.get('score', 6) }}" style="flex: 1; max-width: 200px;">
                 <output name="score-display" style="font-weight: bold; font-size: 20px; color: #ff4d4f; width: 30px; text-align: center;">{{ current.get('score', 6) }}</output>
@@ -116,7 +122,7 @@
           {% set ans = answers.get(i|string) %}
           {% set has_answered = ans is not none and ans.user_answer is not none and ans.user_answer != "" and ans.user_answer != [] %}
           
-          <a href="/bank/{{ bank.id }}/practice/{{ i }}" 
+          <a href="/practice/{{ mode }}/{{ i }}" 
              class="answer-card-item 
                     {% if i == index %} current {% endif %}
                     {% if not is_submitted %}
@@ -131,16 +137,14 @@
         {% endfor %}
       </div>
 
-      <!-- 操作按钮 -->
       {% if not is_submitted %}
-        <form method="post" action="/bank/{{ bank.id }}/submit" onsubmit="return confirm('确定要交卷吗？交卷后不可修改答案。');">
+        <form method="post" action="/practice/{{ mode }}/submit" onsubmit="return confirm('确定要交卷吗？交卷后不可修改答案。');">
           <button type="submit" class="btn btn-primary btn-large" style="background-color: #52c41a; border-color: #52c41a;">交 卷</button>
         </form>
       {% else %}
         <button type="button" disabled class="btn btn-large">已 交 卷</button>
       {% endif %}
 
-      <!-- 图例 -->
       <div class="legend">
         {% if not is_submitted %}
           <div class="legend-item"><span class="legend-box"></span> 未作答</div>

@@ -1,19 +1,53 @@
 {% extends "base.html" %}
+
 {% block title %}我的收藏 - DocQuiz{% endblock %}
+
 {% block content %}
-  <h2>我的收藏</h2>
-  <p class="meta">共 {{ favorites|length }} 道题目。</p>
-  <hr>
+<!-- 返回按钮 -->
+ <p style="margin-bottom: 15px;"><a href="/" style="font-size: 15px;">← 返回我的题库</a></p>
+ 
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div>
+      <h2 style="margin: 0 0 8px 0;">我的收藏</h2>
+      <p class="meta" style="margin: 0;">共 {{ favorites|length }} 道题目。</p>
+    </div>
+    {% if favorites %}
+      <a href="/practice/favorite" class="btn" style="background-color: #faad14; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(250,173,20,0.3);">
+        ⚡ 一键重刷所有收藏
+      </a>
+    {% endif %}
+  </div>
+
+  <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 20px 0;">
+
   {% if favorites %}
-    {% for fav in favorites %}
-      <div class="card">
-        <h3>{{ fav.question.stem }}</h3>
-        <p><strong>题型：</strong>{{ fav.question.type }}</p>
-        <p><strong>标准答案：</strong>{{ fav.question.answer }}</p>
-        <p class="meta">收藏时间：{{ fav.created_at }}</p>
+    <!-- 滚动容器：限制最大高度，超出出现滚动条 -->
+    <div style="max-height: 65vh; overflow-y: auto; padding-right: 10px;">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        {% for fav in favorites %}
+          <div class="card" style="margin-bottom: 0; border-left: 4px solid #faad14; padding: 20px;">
+            <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 18px; color: #333;">{{ fav.question.stem }}</h3>
+            
+            <p style="margin: 6px 0; font-size: 14px;"><strong style="color: #595959;">题型：</strong>{{ fav.question.type }}</p>
+            <p style="margin: 6px 0; font-size: 14px;"><strong style="color: #595959;">标准答案：</strong><span style="color: #52c41a; font-weight: bold;">{{ fav.question.answer }}</span></p>
+            
+            {% if fav.question.analysis %}
+              <p style="margin: 6px 0; font-size: 14px; color: #8c8c8c; background: #fafafa; padding: 10px; border-radius: 4px;">
+                <strong>解析：</strong>{{ fav.question.analysis }}
+              </p>
+            {% endif %}
+            
+            <p class="meta" style="margin-top: 12px; margin-bottom: 0; font-size: 12px; text-align: right;">
+              收藏时间：{{ fav.created_at.strftime('%Y-%m-%d %H:%M') }}
+            </p>
+          </div>
+        {% endfor %}
       </div>
-    {% endfor %}
+    </div>
   {% else %}
-    <p>还没有收藏任何题目。</p>
+    <div class="card" style="text-align: center; padding: 40px;">
+      <p class="meta">还没有收藏任何题目，做题时点一下星星就可以收藏啦。</p>
+      <a href="/" class="btn btn-primary" style="margin-top: 10px;">去刷题</a>
+    </div>
   {% endif %}
 {% endblock %}

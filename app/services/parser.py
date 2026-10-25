@@ -99,7 +99,7 @@ def import_questions_from_json(file_path: str, bank_name: str = None) -> dict:
     }
 
 # 在 app/services/parser.py 末尾加上这个函数
-def import_questions_from_data(data_list: list, bank_name: str, bank_id: int = None) -> dict:
+def import_questions_from_data(data_list: list, bank_name: str, user_id: int, bank_id: int = None) -> dict:
     if not data_list or not isinstance(data_list, list):
         raise ValueError("JSON 数据格式错误，必须是数组且不能为空")
 
@@ -108,7 +108,7 @@ def import_questions_from_data(data_list: list, bank_name: str, bank_id: int = N
         # 找到当前题库最大的题号，方便后面追加
         max_order = db.session.query(db.func.max(Question.order_no)).filter_by(bank_id=bank.id).scalar() or 0
     else:
-        bank = QuestionBank(name=bank_name, source_type="json", source_file="")
+        bank = QuestionBank(name=bank_name, source_type="json", source_file="",user_id=user_id, status="success")
         db.session.add(bank)
         db.session.flush()
         max_order = 0
