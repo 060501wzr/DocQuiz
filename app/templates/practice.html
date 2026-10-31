@@ -7,16 +7,12 @@
 {% endblock %}
 
 {% block content %}
-  <div class="top-nav">
+  <div class="top-nav" style="margin-bottom: 15px;">
     {% if mode.startswith('bank_') %}
       <a href="/bank/{{ mode.split('_')[1] }}">← 返回题库详情</a>
-    {% elif mode == 'wrong' %}
-      <a href="/wrong">← 返回错题本</a>
-    {% elif mode == 'favorite' %}
-      <a href="/favorites">← 返回收藏夹</a>
+    {% else %}
+      <a href="/">← 返回我的题库</a>
     {% endif %}
-    <a href="/wrong" style="color: #ff4d4f;">错题本</a>
-    <a href="/favorites" style="color: #faad14;">我的收藏</a>
   </div>
 
   <div class="practice-layout">
