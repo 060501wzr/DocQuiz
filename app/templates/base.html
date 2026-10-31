@@ -3,119 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f1e9">
   <title>{% block title %}DocQuiz{% endblock %}</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f0f2f5; margin: 0; color: #333; line-height: 1.6; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 20px 40px; }
-    h1, h2, h3 { color: #1a1a1a; }
-    a { color: #1890ff; text-decoration: none; transition: color 0.3s; }
-    a:hover { color: #40a9ff; text-decoration: none; }
-    .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 24px; margin-bottom: 24px; }
-    .meta { color: #8c8c8c; font-size: 14px; }
-    
-    /* ====== 导航栏样式 ====== */
-    .top-navbar { 
-      background: #fff; 
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08); 
-      height: 64px; 
-      padding: 0 40px; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      margin-bottom: 20px; 
-    }
-    
-    .nav-left { display: flex; align-items: center; }
-    .logo-img { height: 40px; object-fit: contain; margin-right: 40px; }
-    
-    /* 中间导航菜单 */
-    .nav-center { display: flex; gap: 10px; flex: 1; }
-    .nav-link { 
-      padding: 8px 16px; 
-      border-radius: 6px; 
-      color: #595959; 
-      font-weight: 500; 
-      transition: all 0.2s; 
-    }
-    .nav-link:hover, .nav-link.active { 
-      background: #e6f7ff; 
-      color: #1890ff; 
-    }
-    
-    /* 右侧用户区域 */
-    .nav-right { display: flex; align-items: center; }
-    .user-dropdown { position: relative; display: inline-block; }
-    .user-btn {
-      background: none; border: none; cursor: pointer;
-      display: flex; align-items: center; gap: 8px;
-      font-size: 15px; color: #333; padding: 8px;
-    }
-    .user-btn:hover { color: #1890ff; }
-    .user-avatar { width: 32px; height: 32px; background: #1890ff; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
-    
-    /* 下拉菜单内容 */
-    .dropdown-content {
-      display: none; position: absolute; right: 0; top: 100%;
-      background-color: #fff; min-width: 160px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px;
-      z-index: 1000; padding: 8px 0; border: 1px solid #f0f0f0;
-    }
-    .user-dropdown:hover .dropdown-content { display: block; }
-    .dropdown-item { 
-      display: block; padding: 10px 20px; color: #595959; font-size: 14px; 
-    }
-    .dropdown-item:hover { background-color: #f5f5f5; color: #1890ff; }
-    .dropdown-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
-    .text-danger { color: #ff4d4f !important; }
-    .text-danger:hover { background-color: #fff1f0 !important; }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
   {% block head %}{% endblock %}
 </head>
 <body>
-  
-  <!-- 全局顶部导航栏 -->
-  <div class="top-navbar">
-    <div class="nav-left">
-      <a href="/"><img src="{{ url_for('static', filename='images/logo.png') }}" class="logo-img" alt="DocQuiz"></a>
-    </div>
-    
-    <div class="nav-center">
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="brand" aria-label="DocQuiz 首页">
+        <span class="brand-mark">D</span>
+        <span class="brand-word">DocQuiz<small>慢一点，学得更扎实</small></span>
+      </a>
       {% if current_user.is_authenticated %}
+      <nav class="main-nav" aria-label="主导航">
         <a href="/" class="nav-link">我的题库</a>
         <a href="/wrong" class="nav-link">错题本</a>
         <a href="/favorites" class="nav-link">我的收藏</a>
-        <!-- 这里预留个人数据页的位置，我们下一步做 -->
-        <a href="#" class="nav-link" style="color:#ccc;" title="即将上线">数据看板</a>
-      {% endif %}
-    </div>
-    
-    <div class="nav-right">
-      {% if current_user.is_authenticated %}
-        <div class="user-dropdown">
-          <button class="user-btn">
-            <div class="user-avatar">{{ current_user.username[0]|upper }}</div>
-            <span>{{ current_user.username }}</span>
-            <span style="font-size: 10px; color: #8c8c8c;">▼</span>
-          </button>
-          <div class="dropdown-content">
-            <a href="/" class="dropdown-item">🏠 返回首页</a>
-            <a href="#" class="dropdown-item" title="即将上线">👤 个人中心</a>
-            <div class="dropdown-divider"></div>
-            <a href="{{ url_for('auth.logout') }}" class="dropdown-item text-danger">🚪 退出登录</a>
-          </div>
-        </div>
+      </nav>
+      <div class="account-menu">
+        <span class="account-avatar">{{ current_user.username[0]|upper }}</span>
+        <span class="account-name">{{ current_user.username }}</span>
+        <a class="logout-link" href="{{ url_for('auth.logout') }}">退出</a>
+      </div>
       {% else %}
-        <a href="{{ url_for('auth.login') }}" class="nav-link" style="color:#1890ff;">登录</a>
-        <span style="color: #d9d9d9; margin: 0 10px;">|</span>
-        <a href="{{ url_for('auth.register') }}" class="nav-link" style="color:#1890ff;">注册</a>
+      <nav class="main-nav guest-nav">
+        <a href="{{ url_for('auth.login') }}" class="nav-link">登录</a>
+        <a href="{{ url_for('auth.register') }}" class="nav-link nav-link-accent">创建账号</a>
+      </nav>
       {% endif %}
     </div>
-  </div>
-
-  <div class="container">
+  </header>
+  <main class="container">
     {% block content %}{% endblock %}
-  </div>
+  </main>
+  <footer class="site-footer"><span>DOCQUIZ</span><span>把每一次练习，变成真正的掌握。</span></footer>
   {% block scripts %}{% endblock %}
 </body>
 </html>
